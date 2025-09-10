@@ -11,7 +11,8 @@
 Quel mot proposez-vous ?
 <form method="post">
     <input type="text" name="lemot">
-    <button type="submit">Envoyer</button> <!-- TODO compléter le bouton -->
+    <button type="submit" name="TODO" value="pendu">Envoyer</button> <!-- TODO compléter le bouton -->
 </form>
+${msg}
 </body>
 </html>

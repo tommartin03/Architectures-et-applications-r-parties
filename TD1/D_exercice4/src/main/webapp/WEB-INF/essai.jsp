@@ -11,10 +11,11 @@
 Quel caractère proposez-vous ?
 <form method="post">
     <input type="text" name="lecaractere">
-    <button type="submit">Envoyer</button> <!-- TODO compléter le bouton -->
+    <button type="submit" name="TODO" value="essai">Envoyer</button> <!-- TODO compléter le bouton -->
 </form>
 
-Pour l'instant vous avez trouvé : <!-- TODO le mot en partie découvert (ou pas)-->
-
+Pour l'instant vous avez trouvé : ${trouve}
+<br>
+Il vous reste ${nbessais} essais.
 </body>
 </html>

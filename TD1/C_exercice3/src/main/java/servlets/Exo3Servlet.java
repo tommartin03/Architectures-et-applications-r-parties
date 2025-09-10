@@ -15,16 +15,58 @@ public class Exo3Servlet extends HttpServlet {
     private int nbEssaisRestants;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // TODO ce qui est fait au premier appel
+        doWhatever(request,response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // TODO ce qui est fait pour les appels suivants...
+        doWhatever(request,response);
+    }
+
+    private void doWhatever(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String caractere = request.getParameter("lecaractere");
+        if (caractere==null || caractere.length()!=1) {
+            caractere=" ";
+        }
+        String todo = request.getParameter("TODO");
+        if(todo==null){
+            request.getRequestDispatcher("/WEB-INF/pendu.jsp").forward(request,response);
+        }
+        else {
+            switch (todo) {
+                case "pendu":
+                    String lemot=request.getParameter("lemot");
+                    if (lemot==null || lemot.isBlank()) {
+                        request.setAttribute("msg", "Veuillez entrer un mot non vide");
+                        request.getRequestDispatcher("/WEB-INF/pendu.jsp").forward(request,response);
+                        return;
+                    }
+                    setaDeviner(lemot);
+                    request.getRequestDispatcher("/WEB-INF/essai.jsp").forward(request,response);
+                    break;
+                case "essai":
+                    test(caractere.charAt(0));
+                    request.setAttribute("trouve",devine);
+                    request.setAttribute("nbessais",nbEssaisRestants);
+                    if(nbEssaisRestants==0 || devine.toString().equals(aDeviner)){
+                        if (nbEssaisRestants==0) {
+                            request.setAttribute("msg", "Perdu! Le mot était: " + aDeviner);
+                        }
+                        else {
+                            request.setAttribute("msg", "Gagné!");
+                        }
+                        request.getRequestDispatcher("/WEB-INF/pendu.jsp").forward(request,response);
+                    }
+                    else {
+                        request.getRequestDispatcher("/WEB-INF/essai.jsp").forward(request,response);
+                    }
+                    break;
+            }
+        }
     }
 
 
-    private void setaDeviner(String Deviner) {
+    private void setaDeviner(String aDeviner) {
         this.aDeviner=aDeviner;
         this.devine=new StringBuilder("_".repeat(aDeviner.length()));
         this.nbEssaisRestants=10;

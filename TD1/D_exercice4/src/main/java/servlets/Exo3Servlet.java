@@ -1,5 +1,6 @@
 package servlets;
 
+import facades.Facade;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -10,35 +11,61 @@ import java.io.IOException;
 
 @WebServlet(urlPatterns = {"/"})
 public class Exo3Servlet extends HttpServlet {
-    private String aDeviner=null;
-    private StringBuilder devine=null;
-    private int nbEssaisRestants;
+
+    private final Facade facade=Facade.getInstance();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // TODO ce qui est fait au premier appel
+        doWhatever(request,response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // TODO ce qui est fait pour les appels suivants...
+        doWhatever(request,response);
     }
 
-
-    private void setaDeviner(String Deviner) {
-        this.aDeviner=aDeviner;
-        this.devine=new StringBuilder("_".repeat(aDeviner.length()));
-        this.nbEssaisRestants=10;
-    }
-
-    private boolean test(char carac){
-        boolean res=false;
-        for (int last=0;last!=-1;last=aDeviner.indexOf(carac,last)) {
-            res = true;
-            devine.setCharAt(last, carac);
+    private void doWhatever(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String caractere = request.getParameter("lecaractere");
+        if (caractere==null || caractere.length()!=1) {
+            caractere=" ";
         }
-        if (res==false) {
-            nbEssaisRestants--;
+        String todo = request.getParameter("TODO");
+        if(todo==null){
+            request.getRequestDispatcher("/WEB-INF/pendu.jsp").forward(request,response);
         }
-        return res;
+        else {
+            switch (todo) {
+                case "pendu":
+                    String lemot=request.getParameter("lemot");
+                    if (lemot==null || lemot.isBlank()) {
+                        request.setAttribute("msg", "Veuillez entrer un mot non vide");
+                        request.getRequestDispatcher("/WEB-INF/pendu.jsp").forward(request,response);
+                        return;
+                    }
+                    facade.setaDeviner(lemot);
+                    request.getRequestDispatcher("/WEB-INF/essai.jsp").forward(request,response);
+                    break;
+                case "essai":
+                    facade.test(caractere.charAt(0));
+                    request.setAttribute("trouve",facade.getDevine());
+                    request.setAttribute("nbessais",facade.getNbEssaisRestants());
+                    if(facade.getNbEssaisRestants()==0 || facade.getDevine().toString().equals(facade.getADeviner())){
+                        if (facade.getNbEssaisRestants()==0) {
+                            request.setAttribute("msg", "Perdu! Le mot était: " + facade.getADeviner());
+                        }
+                        else {
+                            request.setAttribute("msg", "Gagné!");
+                        }
+                        request.getRequestDispatcher("/WEB-INF/pendu.jsp").forward(request,response);
+                    }
+                    else {
+                        request.getRequestDispatcher("/WEB-INF/essai.jsp").forward(request,response);
+                    }
+                    break;
+            }
+        }
     }
+
+
+
 }
