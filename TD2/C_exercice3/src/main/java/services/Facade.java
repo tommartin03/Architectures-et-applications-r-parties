@@ -1,12 +1,14 @@
 package services;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Facade {
     private static Facade instance=null;
 
     private Map<String,String> users;
+    private List<String> humeurs=List.of("heureux","triste","excité","bavard");
 
     private Facade(){
         users=new HashMap<>();
@@ -24,6 +26,10 @@ public class Facade {
     public boolean checkLP(String login,String password) {
         String pwd=users.get(login);
         return ((pwd!=null) && (pwd.equals(password)));
-   }
+    }
+
+    public List<String> getHumeurs() {
+        return humeurs;
+    }
 
 }

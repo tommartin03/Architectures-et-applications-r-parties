@@ -12,13 +12,14 @@ import org.springframework.web.bind.support.SessionStatus;
 import services.Facade;
 
 @Controller
-@SessionAttributes("courant")
+@SessionAttributes({"courant", "humeur"})
 @RequestMapping("/")
 public class Exercice1Controller {
     private Facade facade=Facade.getInstance();
     @RequestMapping("")
-    public String toLogin() {
-        return("login");
+    public String toLogin(Model model) {
+        model.addAttribute("humeurs", facade.getHumeurs());
+        return "login";
     }
 
     // on passe un objet user en paramètre : mapping automatique des champs du formulaire
@@ -29,6 +30,7 @@ public class Exercice1Controller {
             // on place courant dans le modèle, mais il s'agit d'un attribut de session, il se retrouve ainsi conservé en session
             model.addAttribute("courant",user.getLogin());
             model.addAttribute("username",user.getLogin());
+            model.addAttribute("humeur",user.getHumeur());
             return "welcome";
         } else {
             // on ajoute un simple message d'erreur au modèle...
