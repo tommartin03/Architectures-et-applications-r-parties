@@ -23,4 +23,13 @@ public class Facade {
         return ((pwd!=null) && (pwd.equals(password)));
    }
 
+    public void changePassword(String login, String newPassword) {
+        for (String key:users.keySet()) {
+            if (key.equals(login)) {
+                users.put(key,newPassword);
+            }
+        }
+    }
+
+
 }

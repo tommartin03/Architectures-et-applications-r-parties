@@ -7,7 +7,7 @@
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
-   <bean id="services.Facade" class="services.Facade" init-method="fillMap">
+   <bean id="services.Service1" class="services.Service1" init-method="fillMap">
    </bean>
 
 </beans>

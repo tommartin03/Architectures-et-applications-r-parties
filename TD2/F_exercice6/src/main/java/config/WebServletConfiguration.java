@@ -14,6 +14,7 @@ public class WebServletConfiguration implements WebApplicationInitializer{
     public void onStartup(ServletContext servletContext) throws ServletException {
         AnnotationConfigWebApplicationContext webctx=new AnnotationConfigWebApplicationContext();
         webctx.register(ClientWebConfig.class);
+        webctx.register(ResourceAndBeanConfig.class);
         webctx.setServletContext(servletContext);
         ServletRegistration.Dynamic servlet=servletContext.addServlet("dispatcher",new DispatcherServlet(webctx));
         servlet.setLoadOnStartup(1);
