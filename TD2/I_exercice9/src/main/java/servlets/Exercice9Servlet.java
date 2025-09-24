@@ -25,6 +25,7 @@ public class Exercice9Servlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String todo = request.getParameter("TODO");
+        System.out.println("TODO = "+todo);
         if ("ChangePassword".equals(todo)) {
             request.getRequestDispatcher("WEB-INF/changePassword.jsp").forward(request,response);
         }
@@ -131,6 +132,7 @@ public class Exercice9Servlet extends HttpServlet {
         // Retour sur la page welcome
         request.setAttribute("username", login);
         request.getRequestDispatcher("/WEB-INF/welcome.jsp").forward(request, response);
+
     }
 
 

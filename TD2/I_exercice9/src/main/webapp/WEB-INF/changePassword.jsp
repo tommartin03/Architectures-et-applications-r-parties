@@ -16,11 +16,11 @@
 <body>
 <h1>Changement de mot de passe</h1>
 
-<form method="post">
+<form method="post" action="Exercice9Servlet">
   <p>Ancien mot de passe: <input type="password" name="oldPassword" /></p>
   <p>Nouveau mot de passe: <input type="password" name="newPassword" /></p>
   <p>Confirmer le nouveau mot de passe: <input type="password" name="confirmPassword" /></p>
-  <p><button type="submit" value="Submit" name="TODO"> Envoyer</button></p>
+  <p><button type="submit" name="TODO" value="DoChangePassword">Envoyer</button></p>
 </form>
 
 
