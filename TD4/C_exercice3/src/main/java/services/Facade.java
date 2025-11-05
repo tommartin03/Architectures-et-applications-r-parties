@@ -34,7 +34,7 @@ public class Facade {
      * @return
      */
     public String  nomProduitPlusGrosseLigne(){
-        Query query = em.createQuery("SELECT p.nomProduit FROM Produit p JOIN Vente v WHERE v.id = (SELECT MAX(lv.quantite) FROM LigneVente lv)");
+        Query query = em.createNamedQuery("entities.Produit.findByNamMaxLigneVent");
         return (String) query.getSingleResult();
     }
 
@@ -45,9 +45,7 @@ public class Facade {
      * @return
      */
     public Produit plusGrosseVenteQuantite() {
-        Query query = em.createQuery("SELECT p FROM Produit p JOIN LigneVente lv ON p.idProduit = lv.produit.idProduit GROUP BY p.idProduit ORDER BY SUM(lv.quantite) DESC");
-        query.setMaxResults(1);
-        return (Produit) query.getSingleResult();
+        return null;
     }
 
     /**
@@ -57,9 +55,7 @@ public class Facade {
      * @return
      */
     public Produit plusGrosseVenteMontant() {
-        Query query = em.createQuery("SELECT p FROM Produit p JOIN LigneVente lv ON p.idProduit = lv.produit.idProduit GROUP BY p.idProduit ORDER BY SUM(lv.quantite) DESC");
-        query.setMaxResults(1);
-        return (Produit) query.getSingleResult();
+        return null;
     }
 
     /**
@@ -68,9 +64,7 @@ public class Facade {
      * @return
      */
     public List<Produit> stockSous(int stockMini) {
-        Query query = em.createQuery("SELECT p FROM Produit p WHERE p.stock <= :stockMini");
-        query.setParameter("stockMini", stockMini);
-        return query.getResultList();
+        return null;
     }
 
     /**
@@ -79,9 +73,7 @@ public class Facade {
      * @return
      */
     public List<Vente> ventesDe(int idProduit) {
-        Query query = em.createQuery("SELECT v FROM Vente v JOIN LigneVente lv ON v.idVente = lv.vente.idVente WHERE lv.produit.idProduit = :idProduit");
-        query.setParameter("idProduit", idProduit);
-        return query.getResultList();
+        return null;
     }
 
       /**
@@ -90,17 +82,7 @@ public class Facade {
      * @return
      */
       public List<LocalDate> datesVentesDe(int idProduit) {
-          String jpql = """
-                SELECT DISTINCT v.dateCmd 
-                FROM Vente v 
-                JOIN v.lignesV lv 
-                WHERE lv.produit.idProduit = :idProduit
-                ORDER BY v.dateCmd
-            """;
-
-          Query query = em.createQuery(jpql);
-          query.setParameter("idProduit", idProduit);
-          return query.getResultList();
+          return null;
       }
 
     /**
@@ -108,14 +90,7 @@ public class Facade {
      * @return
      */
     public List<Produit> produitsNonVendus() {
-        String jpql = """
-        SELECT p 
-        FROM Produit p 
-        LEFT JOIN p.ventes lv 
-        WHERE lv IS NULL
-        """;
-
-        return em.createQuery(jpql, Produit.class).getResultList();
+        return null;
     }
 
     /**
@@ -124,15 +99,7 @@ public class Facade {
      * @return
      */
     public List<Gestionnaire> acheteurDe(int idProduit) {
-        String jpql = """
-        SELECT DISTINCT la.approvisionnement.gestionnaire 
-        FROM LigneApprovisionnement la 
-        WHERE la.produit.idProduit = :idProduit
-        """;
-
-        return em.createQuery(jpql, Gestionnaire.class)
-                .setParameter("idProduit", idProduit)
-                .getResultList();
+        return null;
     }
 
     /**
@@ -141,19 +108,7 @@ public class Facade {
      * @return
      */
     public Produit moinsCherDe(int idCategorie) {
-        String jpql = """
-        SELECT p 
-        FROM Produit p 
-        WHERE p.categorie.idCategorie = :idCategorie 
-        ORDER BY p.prixVente ASC
-        """;
-
-        List<Produit> produits = em.createQuery(jpql, Produit.class)
-                .setParameter("idCategorie", idCategorie)
-                .setMaxResults(1)
-                .getResultList();
-
-        return produits.isEmpty() ? null : produits.get(0);
+        return null;
     }
 
     /**
@@ -162,18 +117,6 @@ public class Facade {
      * @return
      */
     public Categorie categorieDe(int idProduit) {
-        String jpql = """
-        SELECT p.categorie 
-        FROM Produit p 
-        WHERE p.idProduit = :idProduit
-        """;
-
-        try {
-            return em.createQuery(jpql, Categorie.class)
-                    .setParameter("idProduit", idProduit)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
+        return null;
     }
 }

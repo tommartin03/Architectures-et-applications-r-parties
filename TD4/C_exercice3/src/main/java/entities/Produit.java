@@ -13,16 +13,7 @@ import java.util.List;
                 @NamedQuery(
                         name = "entities.Produit.findByNamMaxLigneVent",
                         query = "SELECT p.nomProduit FROM Produit p JOIN Vente v WHERE v.id = (SELECT MAX(lv.quantite) FROM LigneVente lv)"
-                ),
-                @NamedQuery(
-                        name = "entities.Produit.plusGrosseVenteQuantite",
-                        query = "SELECT p FROM Produit p JOIN LigneVente lv ON p.idProduit = lv.produit.idProduit GROUP BY p.idProduit ORDER BY SUM(lv.quantite) DESC"
-                ),
-                @NamedQuery(
-                        name = "entities.Produit.produitsPlusVendusPourCategorie",
-                        query = "SELECT p FROM Produit p JOIN LigneVente lv ON p.idProduit = lv.produit.idProduit WHERE p.categorie.idCategorie = :idCategorie GROUP BY p.idProduit ORDER BY SUM(lv.quantite) DESC"
                 )
-
 
         }
 )
