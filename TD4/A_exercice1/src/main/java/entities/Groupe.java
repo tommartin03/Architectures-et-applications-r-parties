@@ -15,10 +15,7 @@ public class Groupe {
     @OneToMany(mappedBy = "concerne")
     private List<Creneau> creneaux;
 
-    @ManyToMany
-    @JoinTable (name = "MEMBRES",
-            joinColumns = {@JoinColumn(name = "IDGROUPE")},
-            inverseJoinColumns = {@JoinColumn(name = "NUMETU")})
+    @ManyToMany(mappedBy = "groupe")
     private List<Etudiant> appartient;
 
     @ManyToMany

@@ -19,10 +19,7 @@ public class Formation {
     @ManyToMany(mappedBy = "etudiantDe")
     private List<Groupe> groupes;
 
-    @ManyToMany
-    @JoinTable (name = "INSCRITS",
-            joinColumns = {@JoinColumn(name = "IDFORM")},
-            inverseJoinColumns = {@JoinColumn(name = "NUMETU")})
+    @ManyToMany(mappedBy = "inscritEn")
     private List<Etudiant> inscrits;
 
     public Formation() {
