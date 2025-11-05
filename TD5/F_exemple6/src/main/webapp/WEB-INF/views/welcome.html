@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Qui qui va où ?</title>
+</head>
+<body>
+<h1>Placer une séance</h1>
+<form action="#" th:action="@{/addseance}" method="post">
+    <p> Groupe :
+        <select name="idGroupe" required>
+            <option th:each="groupe : ${groupes}" th:value="${groupe.idGroupe}" th:text="${groupe.libelleGroupe}"/>
+        </select>
+        Matiere :
+        <select name="idMatiere" required>
+            <option th:each="matiere : ${matieres}" th:value="${matiere.idMatiere}" th:text="${matiere.intituleMatiere}"/>
+        </select>
+        Salle :
+        <select name="idSalle" required>
+            <option th:each="salle : ${salles}" th:value="${salle.idSalle}" th:text="${salle.nomSalle}"/>
+        </select>
+        De:
+        <input name="debut" type="datetime-local"  required>
+        A:
+        <input name="fin" type="datetime-local" required>
+        <button type="submit">Ajouter</button>
+    </p>
+</form>
+
+<h1>Les affectations</h1>
+
+<ul>
+    <li th:each="seance : ${seances}" th:text="${seance.debut}+'->'+${seance.fin}+' : '+${seance.salle.nomSalle}+' ('+${seance.groupe.libelleGroupe}+' : '+${seance.matiere.intituleMatiere}+')'"></li>
+</ul>
+
+
+</body>
+</html>

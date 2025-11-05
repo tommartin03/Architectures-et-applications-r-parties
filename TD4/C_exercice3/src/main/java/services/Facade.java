@@ -4,6 +4,8 @@ import entities.Categorie;
 import entities.Gestionnaire;
 import entities.Produit;
 import entities.Vente;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.Query;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityManager;
@@ -22,7 +24,9 @@ public class Facade {
      * @return
      */
     public Produit findById(int idProduit) {
-        return null;
+        Query query = em.createNamedQuery("entities.Produit.findByID");
+        query.setParameter("idProduit", idProduit);
+        return  (Produit) query.getSingleResult();
     }
 
     /**
@@ -30,7 +34,8 @@ public class Facade {
      * @return
      */
     public String  nomProduitPlusGrosseLigne(){
-        return null;
+        Query query = em.createQuery("SELECT p.nomProduit FROM Produit p JOIN Vente v WHERE v.id = (SELECT MAX(lv.quantite) FROM LigneVente lv)");
+        return (String) query.getSingleResult();
     }
 
     /**
@@ -40,7 +45,9 @@ public class Facade {
      * @return
      */
     public Produit plusGrosseVenteQuantite() {
-        return null;
+        Query query = em.createQuery("SELECT p FROM Produit p JOIN LigneVente lv ON p.idProduit = lv.produit.idProduit GROUP BY p.idProduit ORDER BY SUM(lv.quantite) DESC");
+        query.setMaxResults(1);
+        return (Produit) query.getSingleResult();
     }
 
     /**
@@ -50,7 +57,9 @@ public class Facade {
      * @return
      */
     public Produit plusGrosseVenteMontant() {
-        return null;
+        Query query = em.createQuery("SELECT p FROM Produit p JOIN LigneVente lv ON p.idProduit = lv.produit.idProduit GROUP BY p.idProduit ORDER BY SUM(lv.quantite) DESC");
+        query.setMaxResults(1);
+        return (Produit) query.getSingleResult();
     }
 
     /**
@@ -59,7 +68,9 @@ public class Facade {
      * @return
      */
     public List<Produit> stockSous(int stockMini) {
-        return null;
+        Query query = em.createQuery("SELECT p FROM Produit p WHERE p.stock <= :stockMini");
+        query.setParameter("stockMini", stockMini);
+        return query.getResultList();
     }
 
     /**
@@ -68,7 +79,9 @@ public class Facade {
      * @return
      */
     public List<Vente> ventesDe(int idProduit) {
-        return null;
+        Query query = em.createQuery("SELECT v FROM Vente v JOIN LigneVente lv ON v.idVente = lv.vente.idVente WHERE lv.produit.idProduit = :idProduit");
+        query.setParameter("idProduit", idProduit);
+        return query.getResultList();
     }
 
       /**
@@ -76,16 +89,33 @@ public class Facade {
      * @param idProduit
      * @return
      */
-    public List<LocalDate> datesVentesDe(int idProduit) {
-        return null;
-    }
+      public List<LocalDate> datesVentesDe(int idProduit) {
+          String jpql = """
+                SELECT DISTINCT v.dateCmd 
+                FROM Vente v 
+                JOIN v.lignesV lv 
+                WHERE lv.produit.idProduit = :idProduit
+                ORDER BY v.dateCmd
+            """;
+
+          Query query = em.createQuery(jpql);
+          query.setParameter("idProduit", idProduit);
+          return query.getResultList();
+      }
 
     /**
      * Renvoie la liste de sproduits qui n'ont jamais été vendus (aucune vente)
      * @return
      */
     public List<Produit> produitsNonVendus() {
-        return null;
+        String jpql = """
+        SELECT p 
+        FROM Produit p 
+        LEFT JOIN p.ventes lv 
+        WHERE lv IS NULL
+        """;
+
+        return em.createQuery(jpql, Produit.class).getResultList();
     }
 
     /**
@@ -93,8 +123,16 @@ public class Facade {
      * @param idProduit
      * @return
      */
-    public List<Gestionnaire> acheteurDe(int idProduit){
-        return null;
+    public List<Gestionnaire> acheteurDe(int idProduit) {
+        String jpql = """
+        SELECT DISTINCT la.approvisionnement.gestionnaire 
+        FROM LigneApprovisionnement la 
+        WHERE la.produit.idProduit = :idProduit
+        """;
+
+        return em.createQuery(jpql, Gestionnaire.class)
+                .setParameter("idProduit", idProduit)
+                .getResultList();
     }
 
     /**
@@ -103,7 +141,19 @@ public class Facade {
      * @return
      */
     public Produit moinsCherDe(int idCategorie) {
-        return null;
+        String jpql = """
+        SELECT p 
+        FROM Produit p 
+        WHERE p.categorie.idCategorie = :idCategorie 
+        ORDER BY p.prixVente ASC
+        """;
+
+        List<Produit> produits = em.createQuery(jpql, Produit.class)
+                .setParameter("idCategorie", idCategorie)
+                .setMaxResults(1)
+                .getResultList();
+
+        return produits.isEmpty() ? null : produits.get(0);
     }
 
     /**
@@ -112,6 +162,18 @@ public class Facade {
      * @return
      */
     public Categorie categorieDe(int idProduit) {
-        return null;
+        String jpql = """
+        SELECT p.categorie 
+        FROM Produit p 
+        WHERE p.idProduit = :idProduit
+        """;
+
+        try {
+            return em.createQuery(jpql, Categorie.class)
+                    .setParameter("idProduit", idProduit)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }

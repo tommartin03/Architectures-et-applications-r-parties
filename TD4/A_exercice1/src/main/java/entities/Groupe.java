@@ -7,13 +7,18 @@ import java.util.List;
 @Entity
 public class Groupe {
     @Id @GeneratedValue
+    @Column(name = "IDGROUPE")
     private int idGroupe;
+    @Column(name = "INTITULE", nullable = false)
     private String intitule;
 
     @OneToMany(mappedBy = "concerne")
     private List<Creneau> creneaux;
 
     @ManyToMany
+    @JoinTable (name = "MEMBRES",
+            joinColumns = {@JoinColumn(name = "IDGROUPE")},
+            inverseJoinColumns = {@JoinColumn(name = "NUMETU")})
     private List<Etudiant> appartient;
 
     @ManyToMany

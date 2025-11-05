@@ -1,9 +1,6 @@
 package entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -11,7 +8,9 @@ import java.util.List;
 public class Formation {
 
     @Id
+    @Column(name = "IDFORM")
     private String idForm;
+    @Column(name = "INTITULEFORM", nullable = false)
     private String intituleForm;
 
     @ManyToMany(mappedBy = "reserve")
@@ -20,7 +19,10 @@ public class Formation {
     @ManyToMany(mappedBy = "etudiantDe")
     private List<Groupe> groupes;
 
-    @ManyToMany(mappedBy = "inscritEn")
+    @ManyToMany
+    @JoinTable (name = "INSCRITS",
+            joinColumns = {@JoinColumn(name = "IDFORM")},
+            inverseJoinColumns = {@JoinColumn(name = "NUMETU")})
     private List<Etudiant> inscrits;
 
     public Formation() {

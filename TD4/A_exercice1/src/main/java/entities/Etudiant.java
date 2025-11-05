@@ -1,22 +1,29 @@
 package entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
 public class Etudiant {
     @Id
+    @Column(name = "NUMETU")
     private String numEtu;
+    @Column(name = "PRENOM", nullable = false)
     private String prenom;
+    @Column(name = "NOM", nullable = false)
     private String nom;
 
-    @ManyToMany(mappedBy = "appartient")
+    @ManyToMany
+    @JoinTable (name = "MEMBRES",
+            joinColumns = {@JoinColumn(name = "NUMETU")},
+            inverseJoinColumns = {@JoinColumn(name = "IDGROUPE")})
     private List<Groupe> groupe;
 
     @ManyToMany
+    @JoinTable (name = "INSCRITS",
+            joinColumns = {@JoinColumn(name = "NUMETU")},
+            inverseJoinColumns = {@JoinColumn(name = "IDFORM")})
     private List<Formation> inscritEn;
 
     public Etudiant() {
