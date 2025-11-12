@@ -33,6 +33,15 @@
     <li th:each="seance : ${seances}" th:text="${seance.debut}+'->'+${seance.fin}+' : '+${seance.salle.nomSalle}+' ('+${seance.groupe.libelleGroupe}+' : '+${seance.matiere.intituleMatiere}+')'"></li>
 </ul>
 
+<ul>
+    <li th:each="rdv, iterStat : ${seances}">
+        <span th:text="${rdv}"></span>
+        <form th:action="@{/seance/delete}" method="post" class="inline">
+            <input type="hidden" name="id" th:value="${iterStat.index + 1}"/> <!-- à adapter selon ton modèle -->
+            <button type="submit" class="delete">Supprimer</button>
+        </form>
+    </li>
+</ul>
 
 </body>
 </html>

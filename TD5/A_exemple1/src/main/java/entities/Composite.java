@@ -8,7 +8,7 @@ public class Composite {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idComposite;
     private String nomComposite;
-    @OneToMany(mappedBy = "composite", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "composite", cascade = CascadeType.ALL, orphanRemoval = true, fetch = )
     private List<Composant> composants;
 
     public int getIdComposite() {

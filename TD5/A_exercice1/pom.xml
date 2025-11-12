@@ -11,6 +11,9 @@
 
     <artifactId>exercice1</artifactId>
 
-<packaging>war</packaging>
+
+
+
+    <packaging>war</packaging>
 
 </project>

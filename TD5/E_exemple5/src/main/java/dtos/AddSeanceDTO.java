@@ -2,7 +2,7 @@ package dtos;
 
 import java.time.LocalDateTime;
 
-public class AddSeanceDTO {
+public class    AddSeanceDTO {
     private int idGroupe;
     private int idSalle;
     private String idMatiere;
