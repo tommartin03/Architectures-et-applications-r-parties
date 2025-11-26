@@ -1,0 +1,6 @@
+### GET request to example server
+POST localhost:8080/api/utilisateurs/0/questions
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiYm9iQHVuaXYtb3JsZWFucy5mciIsImlkVXRpbGlzYXRldXIiOiIwIiwiZXhwIjoxNzMyNTcxNzA4LCJpYXQiOjE3MzI1MzU3MDgsInNjb3BlIjoiRVRVRElBTlQgRU5TRUlHTkFOVCJ9.h-0xc13nRcasMPCBa1UswPsRUvf9caGE4fwW1lRg314
+Content-Type: text/plain
+
+Et alors ?

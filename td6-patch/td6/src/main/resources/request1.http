@@ -1,0 +1,13 @@
+### GET request to example server
+POST localhost:8080/api/utilisateurs?email=bob@univ-orleans.fr&password=babar
+
+###
+
+
+POST localhost:8080/api/login
+Content-Type: application/json
+
+{
+  "email": "bob@univ-orleans.fr",
+  "password": "babar"
+}
