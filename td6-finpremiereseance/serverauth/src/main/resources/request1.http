@@ -1,0 +1,47 @@
+### POST login
+POST localhost:8080/api/myforum/auth/login
+Content-Type: application/json
+
+{
+  "email": "bob",
+  "password": "bob"
+}
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 400, "Expected status is not 400");
+    });
+ %}
+
+### POST login
+POST localhost:8080/api/myforum/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@univ-orleans.fr",
+  "password": "toto"
+}
+
+> {%
+    client.global.set("admin_token", response.body.token);
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Expected status is not 200");
+    });
+ %}
+
+
+### POST user
+POST localhost:8080/api/myforum/auth/users
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+  "email": "bob@univ-orleans.fr",
+  "password": "bob",
+  "roles": "USER"
+}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Expected status is not 201");
+    });
+ %}

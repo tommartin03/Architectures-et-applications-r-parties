@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: service-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: rewritepath_authent
+              uri: lb://jwtauthentication
+              predicates:
+                - Path=/api/myforum/auth/**
+              filters:
+                - RewritePath=/api/myforum/auth/(?<segment>.*), /api/$\{segment}
+    consul:
+        host: ${CONSUL_HOST:localhost}
+        port: ${CONSUL_PORT:8500}
+        discovery:
+          register: true

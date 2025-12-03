@@ -1,0 +1,20 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: jwtauthentication
+    cloud:
+      consult:
+        host: ${CONSUL_HOST:localhost}
+        port: ${CONSUL_PORT:8500}
+        discorvery:
+          enabled: true
+          register: true
+          prefer-ip-address: true
+security:
+  jwt:
+    issuer: demo-jwt-authentication
+    expiration-minutes: 15
+    key:
+      public: classpath:rsaKey.public
+      private: classpath:rsaKey.private
